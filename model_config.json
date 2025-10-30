@@ -1,0 +1,25 @@
+{
+  "input_dim": 13,
+  "num_classes": 3,
+  "feature_names": [
+    "1",
+    "0.49788",
+    "0.48246",
+    "-0.05921",
+    "0.96082",
+    "0.12600",
+    "0.31287",
+    "-0.57545",
+    "-0.58331",
+    "-0.91699",
+    "-0.00665",
+    "-0.21712",
+    "-1.18084"
+  ],
+  "class_names": [
+    "HIGH NON-ADHERENT",
+    "LOW ADHERENT",
+    "MEDIUM ADHERENT"
+  ],
+  "best_model": "DAG Model"
+}
