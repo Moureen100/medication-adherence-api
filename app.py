@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from flask import Flask, request, jsonify
 import os
 from datetime import datetime
-from flask_cors import CORS  # Add this import
+import functools
 
 # Define the DAG Model architecture
 class DAGModel(nn.Module):
@@ -54,6 +54,14 @@ class DAGModel(nn.Module):
         return output
 
 app = Flask(__name__)
+
+# CORS support
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 # Global variables for model and preprocessing objects
 model = None
@@ -120,9 +128,12 @@ def health():
         "timestamp": datetime.now().isoformat()
     })
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
     """Endpoint for single prediction"""
+    if request.method == 'OPTIONS':
+        return jsonify({})
+        
     try:
         data = request.get_json()
 
@@ -176,9 +187,12 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/batch_predict', methods=['POST'])
+@app.route('/batch_predict', methods=['POST', 'OPTIONS'])
 def batch_predict():
     """Endpoint for batch predictions"""
+    if request.method == 'OPTIONS':
+        return jsonify({})
+        
     try:
         data = request.get_json()
 
@@ -239,5 +253,3 @@ load_model()
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(debug=False, host='0.0.0.0', port=port)
-    app = Flask(__name__)
-CORS(app)  # Add this line - enables CORS for all routes
