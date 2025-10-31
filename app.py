@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from flask import Flask, request, jsonify
 import os
 from datetime import datetime
+from flask_cors import CORS  # Add this import
 
 # Define the DAG Model architecture
 class DAGModel(nn.Module):
@@ -238,3 +239,5 @@ load_model()
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(debug=False, host='0.0.0.0', port=port)
+    app = Flask(__name__)
+CORS(app)  # Add this line - enables CORS for all routes
